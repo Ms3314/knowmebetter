@@ -45,7 +45,7 @@ export const authOption:NextAuthOptions = {
     ] , 
     callbacks : {
         async jwt({token , user}) {
-            if(token) {
+            if(user) {
                 // as we re declared the types in out next-auth.d.ts , the error just vanished away 
                 token._id = user._id?.toString() ;
                 token.isVerified = user.isVerified ;

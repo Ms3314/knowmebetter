@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         }
 
         const existingUserVerifiedByEmail = await UserModel.findOne({email});
-
+        
         // checking if the email exist in the DB 
         const verifyCode = Math.floor(100000 + Math.random()*900000).toString()
         // checking if the email already exists 
@@ -58,10 +58,10 @@ export async function POST(request: Request) {
             await newUser.save();
         }
         const emailResponse = await sendVerificationEmail(email , username , verifyCode)
-        if(!emailResponse) {
+        if(!emailResponse.success) {
             return Response.json({
                 success : false , 
-                message : "There was some error sending the verification code ",
+                message : emailResponse.message,
             },{status:500})
         }
         return Response.json({
@@ -81,3 +81,5 @@ export async function POST(request: Request) {
     )
     }
 }
+// we are not handling anythig like verifyingthe specfcif user here so that is why we are having an another route for this thing 
+
