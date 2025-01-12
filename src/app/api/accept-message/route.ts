@@ -54,7 +54,8 @@ export async function GET (request : Request) {
         else {
             return Response.json({
                 success : true ,
-                isAcceptineMessage : foundUser.isAcceptingMessage  
+                // @ts-expect-error-need to check what is in the founduser
+                isAcceptineMessages : foundUser.isAcceptingMessages  
             })
         }
     } catch (error) {
