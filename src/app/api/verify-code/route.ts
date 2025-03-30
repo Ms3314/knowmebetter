@@ -27,7 +27,7 @@ export async function POST(request:Request) {
             return JsonResponse("Incorrect Verification Code", false, 400);
         }
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         return JsonResponse("Error Verifying user", false, 500);
     }
 }

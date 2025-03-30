@@ -10,10 +10,10 @@ export async function GET () {
       model: google('gemini-1.5-pro-latest'),
       prompt,
     });
-    console.log(text , "the message answer")
+    // console.log(text , "the message answer")
     return JsonResponse(text , true , 200)      
   } catch (error:unknown) {
-    console.log(error)
+    // console.log(error)
     JsonResponse( "something went wrong , llm error" , false , 500)
   }
     

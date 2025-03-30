@@ -6,7 +6,6 @@ import { ApiResponse } from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
-import { Message } from 'postcss'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import axios from 'axios'
@@ -20,8 +19,9 @@ import { Switch } from '@radix-ui/react-switch';
 const Page = () => {
     // iska jo type hai wah message hai as we are adding it init 
     const [messages , setMessages] = useState<Message[]>([])
-    const [isLoading , setIsLoading] = useState(false) ;
-    const [isSwitchLoading , setIsSwitchLoading] = useState(false) ;
+    const [isLoading , setIsLoading] = useState(true) ;
+    const [isSwitchLoading , setIsSwitchLoading] = useState(true) ;
+    const [isAcceptingMessage , setIsAcceptingMessage] = useState(true) ;
     const {toast} = useToast();
 
     const handleDeleteMessage = (messageid  : string) => {
@@ -30,20 +30,18 @@ const Page = () => {
 
     const {data : session} = useSession()
 
-    const form = useForm({
-        resolver : zodResolver(acceptMessagesSchema)
-    })
+    
 
-    const {register , watch , setValue} = form ;
 
-    const acceptMessages = watch('acceptMessages')
     
     const fetchAcceptMessage = useCallback(async () => {
         setIsSwitchLoading(true)
         try {
             const response = await axios.get<ApiResponse>('/api/accept-message')
-            setValue('acceptMessages' , response.data.isAcceptingMessages )
-        } catch (error) {
+            // console.log(response)
+            // @ts-expect-error-this might throw error
+            setIsAcceptingMessage(response.data.isAcceptingMessages)
+          } catch (error) {
             const axiosError = error as AxiosError<ApiResponse>
             toast({
                 title : "Error" ,
@@ -53,51 +51,55 @@ const Page = () => {
         } finally {
             setIsSwitchLoading(false)
         }
-    },[setValue])
+    },[]);
 
     
 
 
     const fetchMessages = useCallback(async (refresh : boolean = false) =>  {
-        setIsLoading(true)  
-        setIsSwitchLoading(false) 
-        try {
-            const response = await axios.get('api/get-message')
-            console.log(response.data.messages )
-            setMessages(response.data.messages || []) ;
-            if(refresh) {
-                toast({
-                    title : "Refreshed Messages" ,
-                    description : "Showing the latest messages"
-                })
-            }
-        } catch (error) {
-            const axiosError = error as AxiosError<ApiResponse>
-            toast({
-                title : "Error" ,
-                description : axiosError.response?.data.message || "Failed to fetch message settings" ,
-                variant :"destructive"
-            })
-        } finally {
-            setIsSwitchLoading(false)
-        }
-    } , [setIsLoading , setMessages])
+          setIsLoading(true)  
+          setIsSwitchLoading(true) 
+          try {
+              const response = await axios.get('api/get-message')
+              // console.log(response , 'this is the reponse')
+              setIsLoading(false)
+              setMessages(response.data.user.messages || []) ;
+              if(refresh) {
+                  toast({
+                      title : "Refreshed Messages" ,
+                      description : "Showing the latest messages"
+                  })
+              }
+          } catch (error) {
+              const axiosError = error as AxiosError<ApiResponse>
+              toast({
+                  title : "Error" ,
+                  description : axiosError.response?.data.message || "Failed to fetch message settings" ,
+                  variant :"destructive"
+              })
+          } finally {
+              setIsSwitchLoading(false)
+          }
+      },[]) 
 
     useEffect(()=>{
         if(!session || !session.user ) return 
         fetchMessages()
         fetchAcceptMessage()
-    },[session , setValue , fetchAcceptMessage , fetchMessages])
+    },[fetchAcceptMessage , fetchMessages , session])
 
     // handle switch change
     const handleSwitchChange = async () => {
         try {
-            const response = await axios.post<ApiResponse>('/api/accept-message');
-            setValue('acceptMessage' , !acceptMessages) ;
+            const response = await axios.post<ApiResponse>('/api/accept-message' , {
+              acceptMessage : !isAcceptingMessage
+            });
             toast({
                 title : response.data.message ,
                 variant : 'default'
             })
+            setIsAcceptingMessage(!isAcceptingMessage)
+            fetchMessages()
         } catch (error) {
             const axiosError = error as AxiosError<ApiResponse>
             toast({
@@ -118,7 +120,7 @@ const Page = () => {
     const baseUrl = `${window.location.protocol}//${window.location.host}`;
     const profileUrl = `${baseUrl}/u/${username}`;
     const copyToClipboard = () => {
-        console.log(session.user as User);
+        // console.log(session.user as User);
         navigator.clipboard.writeText(profileUrl);
         toast({
           title: "URL Copied",
@@ -142,17 +144,20 @@ const Page = () => {
           <Button className='cursor-pointer' onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
-
-      <div className="mb-4">
-        <Switch
-          {...register("acceptMessages")}
-          checked={acceptMessages}
-          onCheckedChange={handleSwitchChange}
-          disabled={isSwitchLoading} 
-        />
-        <span className="ml-2">
-          Accept Messages: {acceptMessages ? "On" : "Off"}
-        </span>
+      <div className="flex items-center mb-4">
+            <Switch
+              checked={isAcceptingMessage}
+              onCheckedChange={handleSwitchChange}
+              disabled={isSwitchLoading}
+              className="relative inline-flex h-6 w-12 pl-6 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 bg-gray-200 data-[state=checked]:bg-blue-600"
+            >
+              <span
+                className="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition-transform duration-200 translate-x-0 data-[state=checked]:translate-x-6"
+              />
+            </Switch>
+            <span className="ml-2">
+              Accept Messages: {isAcceptingMessage ? "On" : "Off"}
+            </span>
       </div>
       <Separator />
 
@@ -163,6 +168,7 @@ const Page = () => {
           fetchMessages(true);
         }}
       >
+
         {isLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
@@ -174,7 +180,6 @@ const Page = () => {
           messages.map((message, index) => (
             <MessageCard
               key={index} 
-            //@ts-expect-error-the problem is with maybe we dont know the types of the messages
               message={message}
               onMessageDelete={handleDeleteMessage}
             />

@@ -33,6 +33,7 @@ export interface User extends Document {
     verifyCodeExpiry: Date;
     isVerified: boolean;
     isAcceptingMessage: boolean;
+    messages: mongoose.Types.ObjectId[]; // Add this line
 }
 
 const UserSchema: Schema<User> = new Schema({
@@ -66,8 +67,13 @@ const UserSchema: Schema<User> = new Schema({
     isVerified: {
         type: Boolean,
         default: false
-    }
+    },
+    messages: [{  
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message"
+    }]
 });
+
 
 // Models
 export const UserModel = (mongoose.models.User as mongoose.Model<User>) || mongoose.model<User>("User", UserSchema);
