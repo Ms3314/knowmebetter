@@ -23,6 +23,7 @@ export async function POST(request: Request) {
         
         // checking if the email exist in the DB 
         const verifyCode = Math.floor(100000 + Math.random()*900000).toString()
+        console.log(verifyCode)
         // checking if the email already exists 
         if(existingUserVerifiedByEmail) {
             // is this thing verified ? YES

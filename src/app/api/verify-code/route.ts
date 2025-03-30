@@ -4,6 +4,8 @@ import { JsonResponse } from "@/lib/helpers";
 import { ClientPageRoot } from "next/dist/client/components/client-page";
 import { type NextResponse } from 'next/server';
 
+// verify-code route this is
+
 export async function POST(request:Request) {
     await dbConnect()
     try {
