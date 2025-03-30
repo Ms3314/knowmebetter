@@ -7,8 +7,9 @@ import {
   Row,
   Section,
   Text,
-  Button,
 } from '@react-email/components';
+
+// VerificationEmail.tsx
 
 interface VerificationEmailProps {
   username: string;

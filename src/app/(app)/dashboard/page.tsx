@@ -1,3 +1,5 @@
+'use client'
+
 import { useToast } from '@/hooks/use-toast';
 import { acceptMessagesSchema } from '@/schemas/acceptMessageSchema';
 import { ApiResponse } from '@/types/ApiResponse';
@@ -53,12 +55,15 @@ const Page = () => {
         }
     },[setValue])
 
+    
+
 
     const fetchMessages = useCallback(async (refresh : boolean = false) =>  {
         setIsLoading(true)  
         setIsSwitchLoading(false) 
         try {
             const response = await axios.get('api/get-message')
+            console.log(response.data.messages )
             setMessages(response.data.messages || []) ;
             if(refresh) {
                 toast({
@@ -97,7 +102,7 @@ const Page = () => {
             const axiosError = error as AxiosError<ApiResponse>
             toast({
                 title : "Error" ,
-                description : axiosError.response?.data.message || "Failed to fetch message settings" ,
+                description : axiosError.response?.data.message || "Failed to change message settings" ,
                 variant :"destructive"
         })
         }
@@ -116,8 +121,8 @@ const Page = () => {
         console.log(session.user as User);
         navigator.clipboard.writeText(profileUrl);
         toast({
-        title: "URL Copied",
-        description: "Profile URL copied to clipboard",
+          title: "URL Copied",
+          description: "Profile URL copied to clipboard",
         });
     };
 
@@ -126,7 +131,7 @@ const Page = () => {
       <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{" "}
+        <h2 className="text-lg font-semibold  mb-2">Copy Your Unique Link</h2>{" "}
         <div className="flex items-center">
           <input
             type="text"
@@ -134,7 +139,7 @@ const Page = () => {
             disabled
             className="input input-bordered w-full p-2 mr-2"
           />
-          <Button onClick={copyToClipboard}>Copy</Button>
+          <Button className='cursor-pointer' onClick={copyToClipboard}>Copy</Button>
         </div>
       </div>
 
@@ -143,7 +148,7 @@ const Page = () => {
           {...register("acceptMessages")}
           checked={acceptMessages}
           onCheckedChange={handleSwitchChange}
-          disabled={isSwitchLoading}
+          disabled={isSwitchLoading} 
         />
         <span className="ml-2">
           Accept Messages: {acceptMessages ? "On" : "Off"}
@@ -152,9 +157,8 @@ const Page = () => {
       <Separator />
 
       <Button
-        className="mt-4"
-        variant="outline"
-        onClick={(e) => {
+          className="mt-4"
+          onClick={(e) => {
           e.preventDefault();
           fetchMessages(true);
         }}

@@ -4,6 +4,7 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/user";
 import {User} from "next-auth"
 import { JsonResponse } from "@/lib/helpers";
+import { AxiosError } from "axios";
 
 export async function POST (request : Request) {
     await dbConnect() ;
@@ -35,31 +36,29 @@ export async function POST (request : Request) {
     
 }
 
-export async function GET (request : Request) {
-    await dbConnect() ;
-    const session = await getServerSession(authOption) 
-    const user: User = session?.user as User ;
-    // if the session doess not exist then you sre not authenticated
-    if(!session || !user) {
-        return JsonResponse("You are not authenticated" , false , 401)
-    }
-    const userid = user._id ;
+export async function GET () {
     try {
-        const {acceptMessage} = await request.json()
-
+        await dbConnect() ;
+        const session = await getServerSession(authOption) 
+        const user: User = session?.user as User ;
+        // if the session doess not exist then you sre not authenticated
+        if(!session || !user) {
+            return JsonResponse("You are not authenticated" , false , 401)
+        }
+        const userid = user._id ;
         const foundUser = await UserModel.findById(userid); 
+        console.log(userid , "does this exist")
+        console.log(foundUser , "does this exist")
         if(!foundUser) {
-            return JsonResponse("User is not found" , false , 404)
+            return JsonResponse("User is not found" + userid , false , 404)
         }
-        else {
-            return Response.json({
-                success : true ,
-                // @ts-expect-error-need to check what is in the founduser
-                isAcceptineMessages : foundUser.isAcceptingMessages  
-            })
-        }
+        return Response.json({
+            success : true ,
+            // @ts-expect-error-need to check what is in the founduser
+            isAcceptineMessages : foundUser.isAcceptingMessages  
+        })
     } catch (error) {
-        return JsonResponse("Something went wrong while checking the status", false , 500 )
+        return JsonResponse("Something went wrong while checking the status" + error , false , 500 )
     }
     
 }

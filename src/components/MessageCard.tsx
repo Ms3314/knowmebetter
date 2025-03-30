@@ -40,12 +40,12 @@ const MessageCard = ({message , onMessageDelete}:MessageCardProp) => {
         onMessageDelete(message._id)
     }
   return (
-    <Card>
-        <CardHeader>
-            <CardTitle>Card Title</CardTitle>
+    <Card className="w-[300px] h-[200px] overflow-hidden">
+        <CardHeader className="flex flex-row justify-between items-center">
+            <CardTitle>Anonymous User</CardTitle>
             <AlertDialog>
                 <AlertDialogTrigger asChild>
-                    <Button variant="destructive"><X className="w-5 h-5" /></Button>
+                    <Button className="w-5 h-5 p-3" variant="destructive"><X className="w-5 h-5" /></Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -61,9 +61,9 @@ const MessageCard = ({message , onMessageDelete}:MessageCardProp) => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-            <CardDescription>Card Description</CardDescription>
         </CardHeader>
         <CardContent>
+            <CardDescription>{message.content}</CardDescription>
         </CardContent>
     </Card>
   
