@@ -60,7 +60,7 @@ const Page = () => {
           setIsLoading(true)  
           setIsSwitchLoading(true) 
           try {
-              const response = await axios.get('api/get-message')
+              const response = await axios.get('/api/get-message')
               // console.log(response , 'this is the reponse')
               setIsLoading(false)
               setMessages(response.data.user.messages || []) ;

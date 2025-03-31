@@ -4,20 +4,21 @@ import dbConnect from "@/lib/dbConnect";
 import {UserModel , MessageModel } from "@/models/user";
 import {User} from "next-auth"
 import { JsonResponse } from "@/lib/helpers";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { MessagaSchema } from "@/models/user";
 import { Message } from "@/models/user";
 
 
 
 export async function POST (request : Request) {
+    console.log("is the send-message route being called mann !!!!")
     await dbConnect();
     const {username , content} = await request.json()
-    // console.log(username , content)
+    console.log(username , content)
     try {
         const user = await UserModel.findOne({username : username})
-        // console.log(user)
         if(!user) {
+            console.log(user)
             return JsonResponse("User is not found" , false , 404)
         }
         // ise User Excepting the messages 
@@ -25,14 +26,15 @@ export async function POST (request : Request) {
         if (!user?.isAcceptingMessage) {
             return JsonResponse("User is not accepting the messages" , false , 403)
         }
-        const newMessage = await MessageModel.create({content}) 
-        // console.log(newMessage , "this is the new message")
-        // const newMessage = {content , createdAt : new Date()} 
-        // console.log(newMessage)
-        user?.messages.push(newMessage as Message) ; 
+        const savedMessage = await MessageModel.create({ content, userId: user._id });
+        // @ts-expect-error-this takes an object id which we are giivng 
+        const messageId = new mongoose.Types.ObjectId(savedMessage._id);
+        user.messages.push(messageId);
+
         await user?.save()
-        return JsonResponse("Message send successfully" , true , 200)
-    } catch (error:any) {
-        return JsonResponse("this is the error message" + error.message, false , 500)
+        return JsonResponse("Message send successfully : " + content, true, 200);
+    } catch (error) {
+        const ErrorMessage = error as Error
+        return JsonResponse("this is the error message" + ErrorMessage.message, false , 500)
     }
 }
