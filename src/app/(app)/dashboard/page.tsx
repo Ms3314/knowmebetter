@@ -1,6 +1,6 @@
 'use client'
 
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast'
 import { acceptMessagesSchema } from '@/schemas/acceptMessageSchema';
 import { ApiResponse } from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios'
 import { userAgent } from 'next/server';
 import MessageCard from '@/components/MessageCard';
-import { Loader2, RefreshCcw } from 'lucide-react';
+import { Loader, Loader2, RefreshCcw } from 'lucide-react';
 import { Button } from '@react-email/components';
 import { Separator } from '@radix-ui/react-separator';
 import { Switch } from '@radix-ui/react-switch';
@@ -22,6 +22,7 @@ const Page = () => {
     const [isLoading , setIsLoading] = useState(true) ;
     const [isSwitchLoading , setIsSwitchLoading] = useState(true) ;
     const [isAcceptingMessage , setIsAcceptingMessage] = useState(true) ;
+    const [checkerSession,setCheckerSessionLoader] = useState(true);
     const {toast} = useToast();
 
     const handleDeleteMessage = (messageid  : string) => {
@@ -30,8 +31,10 @@ const Page = () => {
 
     const {data : session} = useSession()
 
-    
-
+    function checkSessionExist() {
+      setCheckerSessionLoader(true);
+      
+    }
 
     
     const fetchAcceptMessage = useCallback(async () => {
@@ -52,9 +55,6 @@ const Page = () => {
             setIsSwitchLoading(false)
         }
     },[]);
-
-    
-
 
     const fetchMessages = useCallback(async (refresh : boolean = false) =>  {
           setIsLoading(true)  
@@ -83,7 +83,10 @@ const Page = () => {
       },[]) 
 
     useEffect(()=>{
-        if(!session || !session.user ) return 
+      if (!session || !session.user ) {
+        setCheckerSessionLoader(false);
+        return ;
+      } 
         fetchMessages()
         fetchAcceptMessage()
     },[fetchAcceptMessage , fetchMessages , session])
@@ -111,11 +114,21 @@ const Page = () => {
         }
     }
 
-    if(!session || !session.user) {
-        return <div>
-            Please Log in
+    if (!session || !session.user) {
+    if (checkerSession) {
+        return (
+            <div className="w-screen h-screen flex items-center justify-center">
+                <Loader2 className="h-10 w-10 animate-spin" />
+            </div> 
+        ) 
+    }     
+    return (
+        <div className="w-screen h-screen flex items-center justify-center">
+            <p className="text-lg">You are not authenticated</p> 
         </div>
-    }
+    )
+}
+
 
     const { username } = session.user as User;
     const baseUrl = `${window.location.protocol}//${window.location.host}`;
@@ -131,10 +144,10 @@ const Page = () => {
 
     return (
       <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-      <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
 
       <div className="mb-4">
-        <h2 className="text-lg font-semibold  mb-2">Copy Your Unique Link</h2>{" "}
+          <h2 className="text-lg font-semibold  mb-2">Copy Your Unique Link</h2>{" "}
+          <h5 className="text-sm text-slate-500 ">share this link with your friends so that they can send questions </h5>
         <div className="flex items-center">
           <input
             type="text"
@@ -176,7 +189,7 @@ const Page = () => {
           <RefreshCcw className="h-4 w-4" />
         )}
       </Button>
-      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6 ">
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <MessageCard
