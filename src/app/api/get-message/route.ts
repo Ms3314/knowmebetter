@@ -21,16 +21,19 @@ export async function GET (request : Request) {
         const userWithMessages = await UserModel.findOne({ _id: userid })
             .populate("messages") // Populate the messages array with message documents
             .exec();
-        console.log(userWithMessages , "user with messahes")
+            
+        
+            console.log(userWithMessages , "user with messahes")
         if (!userWithMessages) {
             return JsonResponse("No messages found for this user.", false, 204);
         }
-
+        
         return Response.json({
             success: true,
             user: userWithMessages,
         }, {status: 200});
     } catch (error: any) {
+        console.log(error , "internal server error")
         return JsonResponse("An error occurred while fetching the messages: " + error.message, false, 500);
     }
 }

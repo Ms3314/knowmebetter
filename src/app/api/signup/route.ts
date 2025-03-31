@@ -1,6 +1,6 @@
 import { sendVerificationEmail } from "@/helpers/sendVerficationEmail";
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/models/user";
+import {UserModel} from "@/models/user";
 import bcrypt from "bcryptjs"
 
 export async function POST(request: Request) {

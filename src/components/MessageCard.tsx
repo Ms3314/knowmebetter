@@ -32,6 +32,7 @@ type MessageCardProp = {
 const MessageCard = ({message , onMessageDelete}:MessageCardProp) => {
     const {toast} = useToast()
     const handleDeleteConfirm = async () => {
+        console.log(message , 'this is the message')
         const response = await axios.delete(`/api/delete-message/${message._id}`)
         toast({
             title : response.data.message
@@ -51,8 +52,8 @@ const MessageCard = ({message , onMessageDelete}:MessageCardProp) => {
                     <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account and remove your data from our servers.
+                        Do you really want to delete this message?
+                        This action cannot be undone.
                     </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

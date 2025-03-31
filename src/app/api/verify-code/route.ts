@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/models/user";
+import {UserModel} from "@/models/user";
 import { JsonResponse } from "@/lib/helpers";
 import { ClientPageRoot } from "next/dist/client/components/client-page";
 import { type NextResponse } from 'next/server';

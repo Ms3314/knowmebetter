@@ -1,5 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
-import UserModel from "@/models/user";
+import {UserModel} from "@/models/user";
 import {z} from 'zod';
 import { usernameValidation } from "@/schemas/signUpSchema";
 
@@ -27,6 +27,7 @@ export async function GET (request :Request) {
             } , {status : 400})
         }
         const {username} = result.data ;
+        console.log(username , "username")
         const isExistingUsername = await UserModel.findOne({username , isVerified : true })
         if(isExistingUsername) {
             return Response.json({

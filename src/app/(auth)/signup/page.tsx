@@ -62,6 +62,7 @@ const Page = () => {
             setUsernameMessage(axiosError.response?.data.message || "Checking username Error")
         } finally {
           setIsCheckingUsername(false)
+          setIsSubmitting(false)
         }
       }
     }
@@ -87,6 +88,8 @@ const Page = () => {
         description : errorMessage ,
         variant : "destructive" 
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 

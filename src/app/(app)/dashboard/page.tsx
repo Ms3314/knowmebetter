@@ -95,7 +95,8 @@ const Page = () => {
               acceptMessage : !isAcceptingMessage
             });
             toast({
-                title : response.data.message ,
+                title : "Accepting Message : " + (!isAcceptingMessage ? "On" : "Off") ,
+                description : response.data.message ,
                 variant : 'default'
             })
             setIsAcceptingMessage(!isAcceptingMessage)
@@ -149,7 +150,7 @@ const Page = () => {
               checked={isAcceptingMessage}
               onCheckedChange={handleSwitchChange}
               disabled={isSwitchLoading}
-              className="relative inline-flex h-6 w-12 pl-6 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 bg-gray-200 data-[state=checked]:bg-blue-600"
+              className={`relative inline-flex h-6 w-12 ${isAcceptingMessage ? ' pl-6 ' : ' '} border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 bg-gray-200 data-[state=checked]:bg-blue-600`}
             >
               <span
                 className="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition-transform duration-200 translate-x-0 data-[state=checked]:translate-x-6"
