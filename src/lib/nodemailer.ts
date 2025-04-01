@@ -5,6 +5,7 @@ const email = process.env.EMAIL_SERVER_USER;
 const pass = process.env.EMAIL_SERVER_PASSWORD;
 const host = process.env.EMAIL_SERVER_HOST;
 const port = process.env.EMAIL_SERVER_PORT;
+const from = process.env.EMAIL_FROM;
 
 // Create a development transporter if credentials are missing
 let transporter: nodemailer.Transporter;
@@ -15,7 +16,6 @@ if (!email || !pass || !host || !port) {
   console.warn('⚠️ Email configuration incomplete. Using development transporter.');
   
   // Create a test account with ethereal.email for development
-  // This will output the preview URL in console during development
   const createDevTransporter = async () => {
     const testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
@@ -32,7 +32,10 @@ if (!email || !pass || !host || !port) {
       from: `"Verification Service" <${testAccount.user}>`,
     };
     
-   
+    console.log('💡 Using Ethereal Email for development');
+    console.log(`› User: ${testAccount.user}`);
+    console.log(`› Pass: ${testAccount.pass}`);
+    console.log('› You can view sent emails at https://ethereal.email');
   };
   
   // Initialize the development transporter
@@ -46,12 +49,17 @@ if (!email || !pass || !host || !port) {
     auth: {
       user: email,
       pass: pass,
-    },
+    }
   });
   
   mailOptions = {
-    from: process.env.EMAIL_FROM || email,
+    from: from || email,
   };
+  
+  // Verify the connection configuration
+  transporter.verify()
+    .then(() => console.log('✅ SMTP connection verified successfully'))
+    .catch(err => console.error('❌ SMTP connection verification failed:', err));
 }
 
 /**
@@ -87,10 +95,14 @@ export const sendEmail = async ({
       text: text || (html ? html.replace(/<[^>]*>/g, '') : ''),
     });
     
+    // If using Ethereal in development, log the preview URL
+    if (info.messageId && (info as any).preview) {
+      console.log('📧 Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    }
     
-    
+    console.log(`📧 Email sent successfully to ${Array.isArray(to) ? to.join(', ') : to}`);
     return { success: true, messageId: info.messageId };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending email:', error);
     throw error;
   }

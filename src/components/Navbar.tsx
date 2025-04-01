@@ -30,7 +30,7 @@ export default function Navbar() {
             </>
           ) : (
             <Link className="w-full md:w-auto" href="/signin">
-              <Button>Login</Button>
+              <Button>Sign In</Button>
             </Link>
           )}
         </div>

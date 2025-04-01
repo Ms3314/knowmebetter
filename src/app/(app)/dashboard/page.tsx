@@ -8,10 +8,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import MessageCard from '@/components/MessageCard';
 import {  Loader2, RefreshCcw } from 'lucide-react';
-import { Button } from '@react-email/components';
 import { Separator } from '@radix-ui/react-separator';
 import { Switch } from '@radix-ui/react-switch';
 import { Message, User } from '@/models/user';
+import Link from 'next/link';
+import { Button } from "@/components/ui/button"
+
 
 const Page = () => {
     // iska jo type hai wah message hai as we are adding it init 
@@ -116,8 +118,11 @@ const Page = () => {
         ) 
     }     
     return (
-        <div className="w-screen h-screen flex items-center justify-center">
+        <div className="w-screen gap-5 h-screen flex items-center justify-center">
             <p className="text-lg">You are not authenticated</p> 
+            <Link href={'/signin'}>
+              <Button className="">Sign In</Button>
+            </Link>
         </div>
     )
 }

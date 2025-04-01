@@ -9,24 +9,32 @@ export async function sendVerificationEmail (
     verifyCode: string,
 ): Promise<ApiResponse> {
     try {
+        // Log the start of the email sending process
+        console.log(`📧 Sending verification email to ${email} for username ${username}`);
+        
         // Render the React email component to HTML
-        const emailHtml = renderReactEmailToHtml(
+        const emailHtml = await renderReactEmailToHtml(
             VerificationEmail({ username, otp: verifyCode })
         );
-
-        // Add console.log to debug the HTML content
-        // console.log("HTML content type:", typeof emailHtml, emailHtml);
-        const emailHtmlFinal = await emailHtml;
+        
         // Send the email using Nodemailer
-        await sendEmail({
+        const result = await sendEmail({
             to: email,
-            subject: 'Mystery Verification Code',
-            html:  emailHtmlFinal,
+            subject: 'Your KnowmeBetter Verification Code',
+            html: emailHtml,
         });
-
-        return { success: true, message: 'Verification email sent successfully' };
-    } catch (emailError) {
-        console.error("Error sending email:", emailError);
-        return { success: false, message: 'Failed to send email' };
+        
+        if (result.success) {
+            console.log(`✅ Verification email successfully sent to ${email}`);
+            return { success: true, message: 'Verification email sent successfully' };
+        } else {
+            throw new Error('Failed to send email');
+        }
+    } catch (emailError: any) {
+        console.error("❌ Error sending verification email:", emailError);
+        return { 
+            success: false, 
+            message: `Failed to send email: ${emailError.message || 'Unknown error'}` 
+        };
     }
 }

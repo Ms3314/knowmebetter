@@ -7,10 +7,11 @@ import { JsonResponse } from "@/lib/helpers";
 export async function POST(request:Request) {
     await dbConnect()
     try {
-        const {username , code} = await request.json() ;
-        const decodedUsername = decodeURIComponent(username)
-        const user = await UserModel.findOne({username:decodedUsername})
+        const {email , code} = await request.json() ;
+        const decodedEmail = decodeURIComponent(email)
+        const user = await UserModel.findOne({email:decodedEmail})
         if(!user) {
+            console.log(user , "this is the user")
             return JsonResponse("User is not found", false, 500);
         }
         const isCodeValid = user.verifyCode === code ;

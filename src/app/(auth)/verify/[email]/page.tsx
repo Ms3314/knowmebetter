@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 
 const VerfifyAccount = () => {
     const router = useRouter()
-    const params = useParams<{username:string}>()
+    const {email} = useParams<{email:string}>()
     const {toast} = useToast()
     const form = useForm({
         resolver : zodResolver(VerifySchema),
@@ -24,7 +24,7 @@ const VerfifyAccount = () => {
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/verify-code', {
-                username : params.username ,
+                email : email ,
                 code : data.code 
             })
             toast({
@@ -50,7 +50,8 @@ const VerfifyAccount = () => {
                     <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
                         Join KnowmeBetter
                     </h1>
-                    <p className="mb-4">Sign in to start your anonymous adventure</p>
+                    <p className="mb-4">A veriifcation code has been sent to {email}</p>
+                    
                 </div>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -67,6 +68,7 @@ const VerfifyAccount = () => {
                             </FormItem>
                         )}
                         />
+                        <p className='text-slate-500 text-sm'>please check your junk folder if your facing difficulty finding the code</p>
                         <Button type="submit">Submit</Button>
                     </form>
                 </Form>
