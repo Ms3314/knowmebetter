@@ -32,10 +32,7 @@ if (!email || !pass || !host || !port) {
       from: `"Verification Service" <${testAccount.user}>`,
     };
     
-    console.log('💡 Using Ethereal Email for development:');
-    console.log(`› User: ${testAccount.user}`);
-    console.log(`› Pass: ${testAccount.pass}`);
-    console.log('› You can view sent emails at https://ethereal.email');
+   
   };
   
   // Initialize the development transporter
@@ -90,10 +87,7 @@ export const sendEmail = async ({
       text: text || (html ? html.replace(/<[^>]*>/g, '') : ''),
     });
     
-    // If using Ethereal in development, log the preview URL
-    if (info.messageId && info.preview) {
-      console.log('📧 Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    }
+    
     
     return { success: true, messageId: info.messageId };
   } catch (error) {

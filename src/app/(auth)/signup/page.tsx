@@ -14,20 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {Loader2 } from "lucide-react"
-// export default function Component({ defaultValue = 'John' }) {
 
-//   return (
-//     <div>
-//       <p>Debounced value: {debouncedValue}</p>
-
-//       <input
-//         type="text"
-//         defaultValue={defaultValue}
-//         onChange={event => setValue(event.target.value)}
-//       />
-//     </div>
-//   )
-// }
 const Page = () => {
   const [isCheckingUsername , setIsCheckingUsername] = useState(false);
   const [username , setUsername] = useState('') ; 
@@ -166,7 +153,7 @@ const Page = () => {
         <div className="text-center mt-4">
             <p>
               Already A memeber? {' '}
-              <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+              <Link href="/signin" className="text-blue-600 hover:text-blue-800">
                 Sign in
               </Link>
             </p>

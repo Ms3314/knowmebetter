@@ -11,7 +11,6 @@ export async function POST(
 ): Promise<Response> {  // Ensure the return type is Promise<Response>
   try {
     const {messageid} = await request.json();
-    console.log(messageid , "this is the message id");
     await dbConnect();
 
     const session = await getServerSession(authOption);

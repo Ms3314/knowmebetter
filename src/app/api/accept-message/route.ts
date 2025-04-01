@@ -22,7 +22,7 @@ export async function POST (request : Request) {
             {isAcceptingMessage : acceptMessage} ,
             {new : true}
         )
-        console.log(updatedUser , "this is the updated user")
+        // console.log(updatedUser , "this is the updated user")
         if(!updatedUser) {
             return JsonResponse("failed to update user Status tp accept messages",false , 401)
         } 
@@ -46,10 +46,8 @@ export async function GET () {
             return JsonResponse("You are not authenticated" , false , 401)
         }
         const userid = user._id ;
-        console.log(userid , "this is the user id")
+        // console.log(userid , "this is the user id")
         const foundUser = await UserModel.findOne({ _id : userid}); 
-        console.log(foundUser , "does this exist")  
-        console.log(foundUser , "does this exist")
         if(!foundUser) {
             return JsonResponse("User is not found" + userid , false , 404)
         }

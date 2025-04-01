@@ -16,14 +16,12 @@ export async function GET () {
     }
 
     const userid = new mongoose.Types.ObjectId(user._id);
-    console.log("what is this user id " , userid)
     try {
         const userWithMessages = await UserModel.findOne({ _id: userid })
             .populate("messages") // Populate the messages array with message documents
             .exec();
             
         
-            console.log(userWithMessages , "user with messahes")
         if (!userWithMessages) {
             return JsonResponse("No messages found for this user.", false, 204);
         }
