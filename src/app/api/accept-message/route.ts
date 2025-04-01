@@ -3,7 +3,6 @@ import { authOption } from "../auth/[...nextauth]/option";
 import dbConnect from "@/lib/dbConnect";
 import {User} from "next-auth"
 import { JsonResponse } from "@/lib/helpers";
-import { AxiosError } from "axios";
 import { UserModel } from "@/models/user";
 
 export async function POST (request : Request) {
@@ -31,7 +30,8 @@ export async function POST (request : Request) {
             return JsonResponse("message update succesfully",true , 200)
         }
     } catch (error) {
-        return JsonResponse("failed to update user Status tp accept messages " + error.message ,false , 500)
+        const ErrorMessage = error as Error
+        return JsonResponse("failed to update user Status tp accept messages " + ErrorMessage.message  ,false , 500)
     }
     
 }
@@ -58,7 +58,8 @@ export async function GET () {
             isAcceptingMessages : foundUser.isAcceptingMessage    
         })
     } catch (error) {
-        return JsonResponse("Something went wrong while checking the status" + error.message , false , 500 )
+        const ErrorMessage = error as Error
+        return JsonResponse("Something went wrong while checking the status" + ErrorMessage.message , false , 500 )
     }
     
 }

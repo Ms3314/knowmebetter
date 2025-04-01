@@ -41,10 +41,10 @@ export async function GET (request :Request) {
             } , {status : 200})
         }
     } catch (error) {
-        console.error("Error checking username " , error)
+        const ErrorMessage = error as Error
         return Response.json({
             success : false ,
-            message :"Error checking username"
+            message :"Error checking username" + ErrorMessage.message
         },
         {status : 500}
     ) 

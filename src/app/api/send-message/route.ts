@@ -1,12 +1,8 @@
-import { getServerSession } from "next-auth";
-import { authOption } from "../auth/[...nextauth]/option";
+
 import dbConnect from "@/lib/dbConnect";
 import {UserModel , MessageModel } from "@/models/user";
-import {User} from "next-auth"
 import { JsonResponse } from "@/lib/helpers";
-import mongoose, { ObjectId } from "mongoose";
-import { MessagaSchema } from "@/models/user";
-import { Message } from "@/models/user";
+import mongoose from "mongoose";
 
 
 

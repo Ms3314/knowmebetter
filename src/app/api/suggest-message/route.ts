@@ -13,8 +13,8 @@ export async function GET () {
     // console.log(text , "the message answer")
     return JsonResponse(text , true , 200)      
   } catch (error:unknown) {
-    // console.log(error)
-    JsonResponse( "something went wrong , llm error" , false , 500)
+    const ErrorMessage = error as Error
+    JsonResponse( "something went wrong , llm error" + ErrorMessage.message , false , 500)
   }
     
 }

@@ -6,6 +6,6 @@ import React from 'react';
  * @param component The React Email component to render
  * @returns HTML string representation of the email
  */
-export function renderReactEmailToHtml(component: React.ReactElement): string {
+export function renderReactEmailToHtml(component: React.ReactElement): Promise<string> {
   return render(component);
 } 

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useToast } from "@/hooks/use-toast"
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VerifySchema } from '@/schemas/verifySchema'
 import axios, { AxiosError } from 'axios'

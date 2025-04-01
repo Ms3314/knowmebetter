@@ -21,7 +21,7 @@ const Page = () => {
   const [charCount, setCharCount] = useState(0);
   const maxChars = 100;
 
-  const handleTextChange = (e) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     if (value.length <= maxChars) {
       setText(value);

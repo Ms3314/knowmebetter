@@ -1,8 +1,6 @@
 import dbConnect from "@/lib/dbConnect";
 import {UserModel} from "@/models/user";
 import { JsonResponse } from "@/lib/helpers";
-import { ClientPageRoot } from "next/dist/client/components/client-page";
-import { type NextResponse } from 'next/server';
 
 // verify-code route this is
 
@@ -27,7 +25,7 @@ export async function POST(request:Request) {
             return JsonResponse("Incorrect Verification Code", false, 400);
         }
     } catch (error) {
-        // console.log(error)
-        return JsonResponse("Error Verifying user", false, 500);
+        const ErrorMessage = error as Error
+        return JsonResponse("Error Verifying user" + ErrorMessage.message, false, 500);
     }
 }

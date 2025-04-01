@@ -29,7 +29,6 @@ import {Loader2 } from "lucide-react"
 //   )
 // }
 const Page = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [isCheckingUsername , setIsCheckingUsername] = useState(false);
   const [username , setUsername] = useState('') ; 
   const [usernameMessage , setUsernameMessage] = useState('') ;

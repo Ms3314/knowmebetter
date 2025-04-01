@@ -1,20 +1,17 @@
 'use client'
 
 import { useToast } from '@/hooks/use-toast'
-import { acceptMessagesSchema } from '@/schemas/acceptMessageSchema';
 import { ApiResponse } from '@/types/ApiResponse';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
 import axios from 'axios'
-import { userAgent } from 'next/server';
 import MessageCard from '@/components/MessageCard';
-import { Loader, Loader2, RefreshCcw } from 'lucide-react';
+import {  Loader2, RefreshCcw } from 'lucide-react';
 import { Button } from '@react-email/components';
 import { Separator } from '@radix-ui/react-separator';
 import { Switch } from '@radix-ui/react-switch';
+import { Message, User } from '@/models/user';
 
 const Page = () => {
     // iska jo type hai wah message hai as we are adding it init 
@@ -31,10 +28,6 @@ const Page = () => {
 
     const {data : session} = useSession()
 
-    function checkSessionExist() {
-      setCheckerSessionLoader(true);
-      
-    }
 
     
     const fetchAcceptMessage = useCallback(async () => {
@@ -54,7 +47,7 @@ const Page = () => {
         } finally {
             setIsSwitchLoading(false)
         }
-    },[]);
+    },[toast]);
 
     const fetchMessages = useCallback(async (refresh : boolean = false) =>  {
           setIsLoading(true)  
@@ -80,7 +73,7 @@ const Page = () => {
           } finally {
               setIsSwitchLoading(false)
           }
-      },[]) 
+      },[toast]) 
 
     useEffect(()=>{
       if (!session || !session.user ) {

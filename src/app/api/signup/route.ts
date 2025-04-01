@@ -2,6 +2,7 @@ import { sendVerificationEmail } from "@/helpers/sendVerficationEmail";
 import dbConnect from "@/lib/dbConnect";
 import {UserModel} from "@/models/user";
 import bcrypt from "bcryptjs"
+import { Error } from "mongoose";
 
 export async function POST(request: Request) {
     await dbConnect();
@@ -71,10 +72,10 @@ export async function POST(request: Request) {
         },{status:201})
 
     } catch (error) {
-        console.error("Erro registering user" , error)
+        const ErrorMessage = error as Error
         return Response.json({
             success : false ,
-            message : "Error registering the user"
+            message : "Error registering the user " + ErrorMessage.message
         },
         {
             status : 500

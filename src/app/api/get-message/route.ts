@@ -3,10 +3,10 @@ import { authOption } from "../auth/[...nextauth]/option";
 import dbConnect from "@/lib/dbConnect";
 import {User} from "next-auth"
 import { JsonResponse } from "@/lib/helpers";
-import mongoose from "mongoose";
+import mongoose, { Error } from "mongoose";
 import { UserModel } from "@/models/user";
 
-export async function GET (request : Request) {
+export async function GET () {
     await dbConnect();
     const session = await getServerSession(authOption) 
     const user: User = session?.user as User ;
@@ -32,9 +32,9 @@ export async function GET (request : Request) {
             success: true,
             user: userWithMessages,
         }, {status: 200});
-    } catch (error: any) {
-        console.log(error , "internal server error")
-        return JsonResponse("An error occurred while fetching the messages: " + error.message, false, 500);
+    } catch (error: unknown) {
+        const ErrorMessage = error as Error
+        return JsonResponse("An error occurred while fetching the messages: " + ErrorMessage.message  , false, 500);
     }
 }
 
