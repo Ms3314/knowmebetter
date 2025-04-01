@@ -18,20 +18,22 @@ export default function Navbar() {
         <Link href="/" className="text-xl font-bold mb-4 md:mb-0">
           KnowmeBetter
         </Link>
-        {session ? (
-          <>
-            <span className="mr-4">
-              Welcome, {user?.username || user?.email}
-            </span>
-            <Button className="w-full md:w-auto" onClick={() => signOut()}>
-              Logout
-            </Button>
-          </>
-        ) : (
-          <Link className="w-full md:w-auto" href="/signin">
-            <Button>Login</Button>
-          </Link>
-        )}
+        <div className="flex items-center ">
+          {session ? (
+            <>
+              <span className="mr-4">
+                Welcome, {user?.username || user?.email}
+              </span>
+              <Button className="w-auto" onClick={() => signOut()}>
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Link className="w-full md:w-auto" href="/signin">
+              <Button>Login</Button>
+            </Link>
+          )}
+        </div>
       </div>
     </nav>
   );

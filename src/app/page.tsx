@@ -1,5 +1,8 @@
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
+
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 sm:p-20 bg-gradient-to-br from-white to-gray-100 text-gray-800 font-sans">
       
@@ -25,9 +28,10 @@ export default function Home() {
           </ul>
         </section>
       </main>
+         <Link href="/dashboard"><Button>Get Started </Button></Link>
 
       {/* Footer */}
-      <footer className="w-full max-w-4xl mt-10 text-center text-sm text-gray-500">
+      <footer className="w-full max-w-4xl mt-5 text-center text-sm text-gray-500">
         Made with ❤️ by Mohammed Samiuddin
       </footer>
     </div>
