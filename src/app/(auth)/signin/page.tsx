@@ -33,7 +33,7 @@ export default function Page() {
       router.replace('/dashboard')
       return ;
     } 
-  } , [session])
+  }, [session, router])
   // zod implementation
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),

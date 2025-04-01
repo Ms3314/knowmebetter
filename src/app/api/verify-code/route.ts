@@ -4,29 +4,41 @@ import { JsonResponse } from "@/lib/helpers";
 
 // verify-code route this is
 
-export async function POST(request:Request) {
-    await dbConnect()
+export async function POST(request: Request) {
+    await dbConnect();
     try {
-        const {email , code} = await request.json() ;
-        const decodedEmail = decodeURIComponent(email)
-        const user = await UserModel.findOne({email:decodedEmail})
-        if(!user) {
-            console.log(user , "this is the user")
-            return JsonResponse("User is not found", false, 500);
+        const { email, code } = await request.json();
+        
+        // Ensure we have both required parameters
+        if (!email || !code) {
+            return JsonResponse("Email and verification code are required", false, 400);
         }
-        const isCodeValid = user.verifyCode === code ;
-        const isCodeNotExpired = new Date() < new Date(user.verifyCodeExpiry) ; 
+        
+        // Find the user by email
+        const user = await UserModel.findOne({ email });
+        
+        if (!user) {
+            console.log("User not found for email:", email);
+            return JsonResponse("User not found. Please check your email address or sign up again.", false, 404);
+        }
+        
+        // Check if the verification code is valid and not expired
+        const isCodeValid = user.verifyCode === code;
+        const isCodeNotExpired = new Date() < new Date(user.verifyCodeExpiry);
+        
         if (isCodeValid && isCodeNotExpired) {
-            user.isVerified = true ;
-            await user.save()
-            return JsonResponse("Account verified Successfully", true, 200);
-        }else if (!isCodeNotExpired) {
-            return JsonResponse("Verification Code has expired please sign up again to get a new code", false, 400);
+            // Mark the user as verified
+            user.isVerified = true;
+            await user.save();
+            return JsonResponse("Account verified successfully! You can now sign in.", true, 200);
+        } else if (!isCodeNotExpired) {
+            return JsonResponse("Verification code has expired. Please sign up again to get a new code.", false, 400);
         } else {
-            return JsonResponse("Incorrect Verification Code", false, 400);
+            return JsonResponse("Incorrect verification code. Please try again.", false, 400);
         }
     } catch (error) {
-        const ErrorMessage = error as Error
-        return JsonResponse("Error Verifying user" + ErrorMessage.message, false, 500);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("Error in verify-code route:", error);
+        return JsonResponse(`Error verifying user: ${errorMessage}`, false, 500);
     }
 }

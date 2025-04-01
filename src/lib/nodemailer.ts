@@ -11,6 +11,11 @@ const from = process.env.EMAIL_FROM;
 let transporter: nodemailer.Transporter;
 let mailOptions: { from: string; };
 
+// For TypeScript type safety when accessing preview URL
+interface EtherealMailInfo extends nodemailer.SentMessageInfo {
+  preview?: string;
+}
+
 // Check if we have all required email configuration
 if (!email || !pass || !host || !port) {
   console.warn('⚠️ Email configuration incomplete. Using development transporter.');
@@ -96,13 +101,15 @@ export const sendEmail = async ({
     });
     
     // If using Ethereal in development, log the preview URL
-    if (info.messageId && (info as any).preview) {
+    const mailInfo = info as EtherealMailInfo;
+    if (mailInfo.messageId && mailInfo.preview) {
       console.log('📧 Preview URL: %s', nodemailer.getTestMessageUrl(info));
     }
     
     console.log(`📧 Email sent successfully to ${Array.isArray(to) ? to.join(', ') : to}`);
     return { success: true, messageId: info.messageId };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     console.error('Error sending email:', error);
     throw error;
   }

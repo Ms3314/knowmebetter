@@ -30,11 +30,12 @@ export async function sendVerificationEmail (
         } else {
             throw new Error('Failed to send email');
         }
-    } catch (emailError: any) {
-        console.error("❌ Error sending verification email:", emailError);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error("❌ Error sending verification email:", error);
         return { 
             success: false, 
-            message: `Failed to send email: ${emailError.message || 'Unknown error'}` 
+            message: `Failed to send email: ${errorMessage}` 
         };
     }
 }

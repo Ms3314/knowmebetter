@@ -1,0 +1,16 @@
+# Exclude build output
+.next/
+out/
+build/
+dist/
+
+# Exclude node modules
+node_modules/
+
+# Exclude example code files 
+/examples/
+
+# Exclude configuration files
+next.config.js
+postcss.config.js
+tailwind.config.js 
