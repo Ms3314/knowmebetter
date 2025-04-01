@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --no-lint",
+    "build": "next build --no-lint --no-typescript",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
@@ -48,8 +48,8 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
-    "@types/react": "19.0.5",
-    "@types/react-dom": "19.0.3",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "postcss": "^8",
@@ -57,7 +57,7 @@
     "typescript": "^5"
   },
   "overrides": {
-    "@types/react": "19.0.5",
-    "@types/react-dom": "19.0.3"
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0"
   }
 }

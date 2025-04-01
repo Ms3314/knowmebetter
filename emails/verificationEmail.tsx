@@ -1,7 +1,6 @@
 import {
   Html,
   Head,
-  Font,
   Preview,
   Heading,
   Row,
@@ -47,16 +46,6 @@ export default function VerificationEmail({ username, otp }: VerificationEmailPr
     <Html lang="en" dir="ltr">
       <Head>
         <title>KnowmeBetter Verification Code</title>
-        <Font
-          fontFamily="Roboto"
-          fallbackFontFamily="Verdana, Arial, sans-serif"
-          webFont={{
-            url: 'https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2',
-            format: 'woff2',
-          }}
-          fontWeight={400}
-          fontStyle="normal"
-        />
       </Head>
       <Preview>Here's your verification code: {otp} for KnowmeBetter</Preview>
       <Container style={{ backgroundColor: '#f9f9f9', padding: '30px 20px' }}>
