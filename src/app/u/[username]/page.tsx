@@ -10,10 +10,24 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { Loader2, RefreshCw, Heart, Brain, Lightbulb, Coffee } from 'lucide-react';
 
 // Types
 import { ApiResponse } from '@/types/ApiResponse';
+
+// Define prompt categories
+type PromptCategory = {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+};
+
+const promptCategories: PromptCategory[] = [
+  { id: 'general', name: 'General', icon: <Coffee className="h-3 w-3 mr-1" /> },
+  { id: 'romantic', name: 'Romantic', icon: <Heart className="h-3 w-3 mr-1" /> },
+  { id: 'intellectual', name: 'Intellectual', icon: <Brain className="h-3 w-3 mr-1" /> },
+  { id: 'creative', name: 'Creative', icon: <Lightbulb className="h-3 w-3 mr-1" /> },
+];
 
 const Page = () => {
   const { username } = useParams();
@@ -21,8 +35,9 @@ const Page = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(true); // Start with loading state
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(true);
   const [suggestionsError, setSuggestionsError] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('general');
   const maxChars = 100;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,12 +48,13 @@ const Page = () => {
     }
   };
 
-  const fetchSuggestions = async () => {
+  const fetchSuggestions = async (category = selectedCategory) => {
     setIsLoadingSuggestions(true);
     setSuggestionsError(false);
     
     try {
-      const response = await axios.get('/api/suggest-message');
+      // Pass the category as a query parameter
+      const response = await axios.get(`/api/suggest-message?category=${category}`);
       
       // Check for success response and handle data with fallbacks
       if (response.data.success) {
@@ -67,6 +83,12 @@ const Page = () => {
     } finally {
       setIsLoadingSuggestions(false);
     }
+  };
+
+  // Change category and fetch new suggestions
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    fetchSuggestions(category);
   };
 
   // Fetch suggestions on initial load
@@ -146,12 +168,34 @@ const Page = () => {
         <CardContent className="pb-4">
           {/* Suggestion section - we show a loading state or the buttons */}
           <div className="mb-4">
+            {/* Category selection buttons */}
+            <div className="mb-3">
+              <p className="text-xs text-slate-500 mb-2">Question type:</p>
+              <div className="flex flex-wrap gap-2">
+                {promptCategories.map((category) => (
+                  <Button
+                    key={category.id}
+                    size="sm"
+                    variant={selectedCategory === category.id ? "default" : "outline"}
+                    className="text-xs px-2 py-1 h-7"
+                    onClick={() => handleCategoryChange(category.id)}
+                    disabled={isLoadingSuggestions}
+                  >
+                    <div className="flex items-center">
+                      {category.icon}
+                      {category.name}
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
             <div className="flex justify-between items-center mb-2">
               <p className="text-sm text-slate-500">Suggested questions:</p>
               <Button 
                 variant="ghost" 
                 size="sm" 
-                onClick={fetchSuggestions} 
+                onClick={() => fetchSuggestions(selectedCategory)} 
                 disabled={isLoadingSuggestions}
                 className="p-1 h-7"
               >
