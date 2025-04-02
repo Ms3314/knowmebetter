@@ -7,14 +7,14 @@ import mongoose from "mongoose";
 
 
 export async function POST (request : Request) {
-    console.log("is the send-message route being called mann !!!!")
+    // console.log("is the send-message route being called mann !!!!")
     await dbConnect();
     const {username , content} = await request.json()
-    console.log(username , content)
+    // console.log(username , content)
     try {
         const user = await UserModel.findOne({username : username})
         if(!user) {
-            console.log(user)
+            // console.log(user)
             return JsonResponse("User is not found" , false , 404)
         }
         // ise User Excepting the messages 

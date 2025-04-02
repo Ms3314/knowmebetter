@@ -10,7 +10,7 @@ export async function sendVerificationEmail (
 ): Promise<ApiResponse> {
     try {
         // Log the start of the email sending process
-        console.log(`📧 Sending verification email to ${email} for username ${username}`);
+        // console.log(`📧 Sending verification email to ${email} for username ${username}`);
         
         // Render the React email component to HTML
         const emailHtml = await renderReactEmailToHtml(
@@ -25,7 +25,7 @@ export async function sendVerificationEmail (
         });
         
         if (result.success) {
-            console.log(`✅ Verification email successfully sent to ${email}`);
+            // console.log(`✅ Verification email successfully sent to ${email}`);
             return { success: true, message: 'Verification email sent successfully' };
         } else {
             throw new Error('Failed to send email');

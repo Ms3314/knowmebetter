@@ -37,10 +37,10 @@ if (!email || !pass || !host || !port) {
       from: `"Verification Service" <${testAccount.user}>`,
     };
     
-    console.log('💡 Using Ethereal Email for development');
-    console.log(`› User: ${testAccount.user}`);
-    console.log(`› Pass: ${testAccount.pass}`);
-    console.log('› You can view sent emails at https://ethereal.email');
+    // console.log('💡 Using Ethereal Email for development');
+    // console.log(`› User: ${testAccount.user}`);
+    // console.log(`› Pass: ${testAccount.pass}`);
+    // console.log('› You can view sent emails at https://ethereal.email');
   };
   
   // Initialize the development transporter

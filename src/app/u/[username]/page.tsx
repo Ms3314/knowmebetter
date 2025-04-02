@@ -15,18 +15,49 @@ import { Loader2, RefreshCw, Heart, Brain, Lightbulb, Coffee } from 'lucide-reac
 // Types
 import { ApiResponse } from '@/types/ApiResponse';
 
-// Define prompt categories
+// Define prompt categories with their associated colors
 type PromptCategory = {
   id: string;
   name: string;
   icon: React.ReactNode;
+  bgColor: string;
+  cardBgColor: string;
+  buttonColor: string;
 };
 
 const promptCategories: PromptCategory[] = [
-  { id: 'general', name: 'General', icon: <Coffee className="h-3 w-3 mr-1" /> },
-  { id: 'romantic', name: 'Romantic', icon: <Heart className="h-3 w-3 mr-1" /> },
-  { id: 'intellectual', name: 'Intellectual', icon: <Brain className="h-3 w-3 mr-1" /> },
-  { id: 'creative', name: 'Creative', icon: <Lightbulb className="h-3 w-3 mr-1" /> },
+  { 
+    id: 'general', 
+    name: 'General', 
+    icon: <Coffee className="h-3 w-3 mr-1" />,
+    bgColor: 'bg-blue-300',
+    cardBgColor: 'bg-white',
+    buttonColor: 'bg-blue-500 hover:bg-blue-700'
+  },
+  { 
+    id: 'romantic', 
+    name: 'Romantic', 
+    icon: <Heart className="h-3 w-3 mr-1" />,
+    bgColor: 'bg-pink-400',
+    cardBgColor: 'bg-pink-50',
+    buttonColor: 'bg-pink-600 hover:bg-pink-700'
+  },
+  { 
+    id: 'intellectual', 
+    name: 'Intellectual', 
+    icon: <Brain className="h-3 w-3 mr-1" />,
+    bgColor: 'bg-emerald-200',
+    cardBgColor: 'bg-emerald-50',
+    buttonColor: 'bg-emerald-600 hover:bg-emerald-700'
+  },
+  { 
+    id: 'creative', 
+    name: 'Creative', 
+    icon: <Lightbulb className="h-3 w-3 mr-1" />,
+    bgColor: 'bg-amber-200',
+    cardBgColor: 'bg-amber-50',
+    buttonColor: 'bg-amber-600 hover:bg-amber-700'
+  },
 ];
 
 const Page = () => {
@@ -39,6 +70,9 @@ const Page = () => {
   const [suggestionsError, setSuggestionsError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('general');
   const maxChars = 100;
+
+  // Get the current category object
+  const currentCategory = promptCategories.find(cat => cat.id === selectedCategory) || promptCategories[0];
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -154,8 +188,8 @@ const Page = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-pink-300 p-4">
-      <Card className="w-full max-w-md shadow-lg border-0">
+    <div className={`flex items-center justify-center min-h-screen ${currentCategory.bgColor} p-4 transition-colors duration-300`}>
+      <Card className={`w-full max-w-md shadow-lg border-0 ${currentCategory.cardBgColor} transition-colors duration-300`}>
         <CardHeader className="pb-2">
           <CardTitle className="text-2xl font-semibold text-slate-800">
             KnowmeBetter
@@ -177,7 +211,7 @@ const Page = () => {
                     key={category.id}
                     size="sm"
                     variant={selectedCategory === category.id ? "default" : "outline"}
-                    className="text-xs px-2 py-1 h-7"
+                    className={`text-xs px-2 py-1 h-7 ${selectedCategory === category.id ? '' : 'hover:bg-opacity-20'}`}
                     onClick={() => handleCategoryChange(category.id)}
                     disabled={isLoadingSuggestions}
                   >
@@ -255,7 +289,7 @@ const Page = () => {
         
         <CardFooter className="flex flex-col gap-2">
           <Button 
-            className="w-full bg-pink-600 hover:bg-pink-700 transition-colors"
+            className={`w-full ${currentCategory.buttonColor} transition-colors duration-300`}
             onClick={handleSubmitMessage}
             disabled={isSubmitting || !text.trim()}
           >
@@ -283,6 +317,21 @@ const Page = () => {
             >
               Create your own KnowmeBetter profile →
             </Link>
+            
+            {/* Built by Sami attribution */}
+            <div className="mt-4 pt-3 border-t border-gray-100">
+              <p className="text-xs text-slate-400">
+                Built with ❤️ by{" "}
+                <a 
+                  href="https://github.com/Ms3314" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="font-medium hover:text-pink-600 transition-colors"
+                >
+                  Sami
+                </a>
+              </p>
+            </div>
           </div>
         </CardFooter>
       </Card>

@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         const user = await UserModel.findOne({ email });
         
         if (!user) {
-            console.log("User not found for email:", email);
+            // console.log("User not found for email:", email);
             return JsonResponse("User not found. Please check your email address or sign up again.", false, 404);
         }
         
