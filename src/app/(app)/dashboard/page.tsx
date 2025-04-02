@@ -143,17 +143,28 @@ const Page = () => {
     return (
       <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
 
-      <div className="mb-4">
-          <h2 className="text-lg font-semibold  mb-2">Copy Your Unique Link</h2>{" "}
-          <h5 className="text-sm text-slate-500 ">share this link with your friends so that they can send questions </h5>
-        <div className="flex items-center">
-          <input
-            type="text"
-            value={profileUrl}
-            disabled
-            className="input input-bordered w-full p-2 mr-2"
-          />
-          <Button className='cursor-pointer' onClick={copyToClipboard}>Copy</Button>
+      <div className="mb-6">
+          <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
+          <h5 className="text-sm text-slate-500 mb-3">Share this link with your friends so they can send you questions</h5>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div className="relative flex-1 overflow-hidden border rounded-md">
+            <input
+              type="text"
+              value={profileUrl}
+              disabled
+              className="w-full p-2 pr-10 text-sm truncate bg-gray-50"
+              aria-label="Your profile URL"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+              <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={copyToClipboard} title="Copy URL">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                </svg>
+              </Button>
+            </div>
+          </div>
+          <Button className="sm:flex-none" onClick={copyToClipboard}>Copy Link</Button>
         </div>
       </div>
       <div className="flex items-center mb-4">

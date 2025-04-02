@@ -258,10 +258,12 @@ const Page = () => {
                   <Button
                     key={index}
                     variant="outline"
-                    className="text-left justify-start h-auto py-2 text-sm"
+                    className="text-left justify-start h-auto py-2 text-sm w-full overflow-hidden"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
-                    {suggestion}
+                    <span className="line-clamp-2 break-words">
+                      {suggestion}
+                    </span>
                   </Button>
                 ))}
               </div>
@@ -317,21 +319,6 @@ const Page = () => {
             >
               Create your own KnowmeBetter profile →
             </Link>
-            
-            {/* Built by Sami attribution */}
-            <div className="mt-4 pt-3 border-t border-gray-100">
-              <p className="text-xs text-slate-400">
-                Built with ❤️ by{" "}
-                <a 
-                  href="https://github.com/Ms3314" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="font-medium hover:text-pink-600 transition-colors"
-                >
-                  Sami
-                </a>
-              </p>
-            </div>
           </div>
         </CardFooter>
       </Card>
