@@ -11,3 +11,8 @@
 - Authentication: Secure user accounts with email/username and password login.
 - Verification: Users need to verify their account using a code sent to their email.
 - Copy link: Users can copy their unique link to share it and let others send them messages
+
+![Screenshot 2025-04-02 130811](https://github.com/user-attachments/assets/d8707d2c-7f44-4240-8c56-08fd5c71626e)
+
+![Screenshot 2025-04-02 130416](https://github.com/user-attachments/assets/3f770cc4-227b-4fdb-9110-7170dab32ee2)
+
